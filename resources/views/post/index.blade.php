@@ -7,9 +7,12 @@
 <section class="w-full md:w-2/3 flex flex-col items-center px-3">
 
     @foreach ($posts as $post)
-        <x-post-item :post="$post">
+        @php
+            $width = 'w-4/6';
+            $height = 'h-4/5';
+        @endphp
+        <x-post-item :post="$post" :height="$height" :width="$width" />
 
-        </x-post-item>
     @endforeach
 
 

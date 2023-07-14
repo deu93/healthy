@@ -16,11 +16,13 @@
                 </div>
             <h1  class="text-3xl font-bold hover:text-gray-700 pb-4">{{ $post->title }}</h1>
             <p href="#" class="text-sm pb-8">
-                    By <a href="#" class="font-semibold hover:text-gray-800">{{  $post->user->name  }}</a>, Published on {{ $post->getFormatedDate() }}
+                    By <a href="#" class="font-semibold hover:text-gray-800">{{  $post->user->name  }}</a>, Published on {{ $post->getFormatedDate() }} | {{ $post->human_read_time }}
                 </p>
                 <div class="">
                     {!! $post->body !!}
                 </div>
+
+                <livewire:upvote-downvote :post="$post"/>
             </div>
         </article>
 

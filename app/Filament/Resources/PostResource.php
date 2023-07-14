@@ -72,25 +72,28 @@ class PostResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('thumbnail'),
-                Tables\Columns\TextColumn::make('title'),
-                Tables\Columns\IconColumn::make('active')
+                Tables\Columns\TextColumn::make('title')->searchable(['title', 'body'])->sortable(),
+                Tables\Columns\IconColumn::make('active')->sortable()
                     ->boolean(),
-                Tables\Columns\TextColumn::make('published_at')
+                Tables\Columns\TextColumn::make('published_at')->sortable()
                     ->dateTime(),
-                //Tables\Columns\TextColumn::make('user.name'),
-
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime(),
             ])
             ->filters([
+                Tables\Filters\TrashedFilter::make(),
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\DeleteAction::make(),
+
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
+                Tables\Actions\ForceDeleteBulkAction::make(),
+                Tables\Actions\RestoreBulkAction::make(),
             ]);
     }
 
@@ -106,7 +109,16 @@ class PostResource extends Resource
         return [
             'index' => Pages\ListPosts::route('/'),
             'create' => Pages\CreatePost::route('/create'),
+            'view' => Pages\ViewPost::route('/{record}/view'),
             'edit' => Pages\EditPost::route('/{record}/edit'),
         ];
     }
+
+    public static function getEloquentQuery(): Builder
+{
+    return parent::getEloquentQuery()
+        ->withoutGlobalScopes([
+            SoftDeletingScope::class,
+        ]);
+}
 }

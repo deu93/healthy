@@ -27,7 +27,7 @@ class CategoryResource extends Resource
     {
         return $form
             ->schema([
-                
+
                 Forms\Components\TextInput::make('title')
                     ->required()
                     ->maxLength(2048)
@@ -45,20 +45,25 @@ class CategoryResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('title'),
-                Tables\Columns\TextColumn::make('slug'),
-                Tables\Columns\TextColumn::make('updated_at')
+                Tables\Columns\TextColumn::make('title')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('updated_at')->sortable()
                     ->dateTime(),
             ])
             ->filters([
+                Tables\Filters\TrashedFilter::make(),
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ForceDeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
             ])
+
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
+                Tables\Actions\ForceDeleteBulkAction::make(),
+                Tables\Actions\RestoreBulkAction::make(),
             ]);
     }
 
@@ -68,4 +73,12 @@ class CategoryResource extends Resource
             'index' => Pages\ManageCategories::route('/'),
         ];
     }
+
+    public static function getEloquentQuery(): Builder
+{
+    return parent::getEloquentQuery()
+        ->withoutGlobalScopes([
+            SoftDeletingScope::class,
+        ]);
+}
 }

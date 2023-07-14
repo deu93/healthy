@@ -20,7 +20,10 @@ return new class extends Migration
             $table->longText('body');
             $table->boolean('active');
             $table->datetime('published_at')->nullable();
+            $table->string('meta_title', 255)->nullable();
+            $table->string('meta_description', 255)->nullable();
             $table->foreignIdFor(User::class, 'user_id');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

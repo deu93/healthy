@@ -7,6 +7,9 @@ use App\Models\User;
 use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
+
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -14,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Post extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
 
     protected $fillable = [
@@ -50,20 +54,32 @@ class Post extends Model
         return $this->belongsToMany(Post::class);
     }
 
-    public function shortBody() : string
+    public function shortBody($words = 30) : string
     {
-        return Str::words(strip_tags($this->body), 30);
+        return Str::words(strip_tags($this->body), $words);
     }
 
     public function getFormatedDate() {
         return $this->published_at->format('F jS Y');
     }
 
-    public function getThumbnail() {
+    public function getThumbnail()
+    {
         if (str_starts_with($this->thumbnail, 'http'))
         {
             return $this->thumbnail;
         }
         return '/storage/' . $this->thumbnail;
+    }
+
+    public function humanReadTime(): Attribute
+    {
+        return new Attribute(get: function($value, $attributes) {
+            $words = Str::wordCount(strip_tags($attributes['body']));
+            $minutes = ceil($words / 200);
+
+            return $minutes . ' '.str('min')->plural($minutes). ', '.$words.' '.str('word')->plural($words);
+        });
+
     }
 }
