@@ -17,8 +17,10 @@
 
     </style>
     @livewireStyles
+
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
 
 </head>
 <body class="bg-gray-50 font-family-karla">
@@ -57,7 +59,13 @@
                     @endforeach
                 </div>
 
-                <div class="">
+                <div class="flex item-center">
+                    <div class="mx-auto max-w-3xl p-3">
+                        <form class="w-64" method="get" action="{{ route('search') }}">
+                            <input name="q" value="{{ request()->get('q') }}" class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6 font-medium" placeholder="Type an hit enter to search anything">
+                        </form>
+                    </div>
+                   <div class="h-full flex items-center mt-3">
                     @auth
                     <div class="flex sm:items-center sm:ml-6">
                         <x-dropdown align="right" width="48">
@@ -93,8 +101,9 @@
                     </div>
                     @else
                     <a href="{{ route('login') }}" class="hover:bg-blue-600 hover:text-white rounded py-2 px-4 mx-2">Login</a>
-                    <a href="{{ route('register') }}" class="bg-blue-600 text-white rounded py-2 px-4 mx-2">Register</a>
+                    <a href="{{ route('register') }}" class="bg-blue-600 text-white rounded py-2 px-4 mx-0">Register</a>
                     @endauth
+                   </div>
                 </div>
 
             </div>
@@ -104,7 +113,10 @@
 
     <div class="container mx-auto flex flex-wrap py-6">
 
-        {{ $slot }}
+
+
+            {{ $slot }}
+        
 
 
 

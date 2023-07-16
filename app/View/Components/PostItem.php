@@ -12,7 +12,7 @@ class PostItem extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct(public Post $post, public bool $showAuthor = true, public string $width = 'w-3/6', public string $height = 'h-80')
+    public function __construct(public Post $post, public bool $showAuthor = true, public string $width = 'w-1/2 sm:w-full', public string $height = 'h-80')
     {
         //
     }

@@ -1,5 +1,4 @@
-<x-app-layout :meta-title="'Healthy Blog - ' . $category->title"
-    :meta-description="'Posts filtered by category ' . $category->title">
+<x-app-layout>
 <div class="container mx-auto flex flex-wrap py-6">
 
 <!-- Posts Section -->
@@ -9,7 +8,9 @@
           <x-post-item :post="$post"/>
       @endforeach
   </div>
-  {{ $posts->links() }}
+  <div class="flex w-full justify-center">
+    {{ $posts->links() }}
+  </div>
 </section>
 
 <!-- Sidebar Section -->

@@ -9,8 +9,9 @@
                     </h2>
                     @php
                         $height = 'h-3/5';
+                        $width = 'w-4/6'
                     @endphp
-                    <x-post-item :post="$latestPost" :height="$height"/>
+                    <x-post-item :post="$latestPost" :width="$width" :height="$height"/>
                 </div>
             @endif
 
@@ -62,9 +63,9 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                 @foreach ($recommendedPosts as $post)
                 @php
-                    $width='w-full';
+                    $width = 'w-full';
                 @endphp
-                    <x-post-item :post="$post" :show-author="false" :width="$width"/>
+                    <x-post-item :post="$post" :width="$width" :show-author="false"/>
                 @endforeach
 
             </div>

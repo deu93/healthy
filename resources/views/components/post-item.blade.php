@@ -1,7 +1,7 @@
 <article class="bg-white flex w-full flex-col shadow my-4">
     <!-- Article Image -->
-    <a href="{{ route('view', $post) }}" class="hover:opacity-75">
-        <img class="{{ $width }} {{ $height }}" src="{{ $post->getThumbnail() }}" alt="{{ $post->title }}">
+    <a class="{{ $width }} {{ $height }}" href="{{ route('view', $post) }}" class="hover:opacity-75">
+        <img class="object-fill max-w-full h-full"  src="{{ $post->getThumbnail() }}" alt="{{ $post->title }}">
     </a>
     <div class="bg-white flex flex-col justify-start p-6">
         <div class="flex gap-4">

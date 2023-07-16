@@ -16,6 +16,7 @@ return new class extends Migration
             $table->longText('comment');
             $table->foreignId('post_id')->references('id')->on('posts')->cascadeOnDelete();
             $table->foreignId('user_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreignId('parent_id')->nullable()->references('id')->on('posts')->cascadeOnDelete();
             $table->softDeletes();
             $table->timestamps();
         });

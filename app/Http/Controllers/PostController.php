@@ -46,7 +46,20 @@ class PostController extends Controller
             ->where('posts.published_at', '<', $parameters['publishedAt'])
             ->havingRaw('upvote_count > downvote_count')
             ->orderByDesc('upvote_count')
-            ->groupBy('posts.id')
+            ->groupBy([
+                'posts.id',
+                'posts.title',
+                'posts.slug',
+                'posts.thumbnail',
+                'posts.body',
+                'posts.active',
+                'posts.published_at',
+                'posts.user_id',
+                'posts.created_at',
+                'posts.updated_at',
+                'posts.meta_title',
+                'posts.meta_description',
+            ])
             ->limit(5)
             ->get();
 
@@ -86,7 +99,20 @@ class PostController extends Controller
                     ->where('posts.active', '=', 1)
                     ->where('posts.published_at', '<', Carbon::now())
                     ->orderByDesc('view_count')
-                    ->groupBy('posts.id')
+                    ->groupBy([
+                        'posts.id',
+                        'posts.title',
+                        'posts.slug',
+                        'posts.thumbnail',
+                        'posts.body',
+                        'posts.active',
+                        'posts.published_at',
+                        'posts.user_id',
+                        'posts.created_at',
+                        'posts.updated_at',
+                        'posts.meta_title',
+                        'posts.meta_description',
+                    ])
                     ->limit(3)
                     ->get();
                 }
@@ -102,7 +128,20 @@ class PostController extends Controller
                 ->where('posts.active', '=', 1)
                 ->where('posts.published_at', '<', Carbon::now())
                 ->orderByDesc('view_count')
-                ->groupBy('posts.id')
+                ->groupBy([
+                    'posts.id',
+                    'posts.title',
+                    'posts.slug',
+                    'posts.thumbnail',
+                    'posts.body',
+                    'posts.active',
+                    'posts.published_at',
+                    'posts.user_id',
+                    'posts.created_at',
+                    'posts.updated_at',
+                    'posts.meta_title',
+                    'posts.meta_description',
+                ])
                 ->limit(3)
                 ->get();
         }
@@ -120,7 +159,13 @@ class PostController extends Controller
             ->leftJoin('posts', 'posts.id', '=', 'category_post.post_id')
             ->where('posts.published_at', '<', Carbon::now())
             ->where('posts.active', '=', 1)
-            ->groupBy('categories.id')
+            ->groupBy([
+                'categories.id',
+                'categories.title',
+                'categories.slug',
+                'categories.created_at',
+                'categories.updated_at',
+            ])
             ->orderByDesc('max_date')
             ->limit(6)
             ->get();
@@ -217,5 +262,22 @@ class PostController extends Controller
         ->paginate(10);
 
         return view('post.index', compact('posts', 'category'));
+   }
+   public function search(Request $request)
+   {
+       $q = $request->get('q');
+
+       $posts = Post::query()
+        ->where('active', '=', true)
+        ->where('published_at', '<=', Carbon::now())
+        ->orderBy('published_at', 'desc')
+        ->where(function($query) use($q) {
+            $query->where('title', 'like', "%$q%")
+            ->orWhere('body', 'like', "%$q%");
+        })
+        ->paginate(10);
+
+
+        return view('post.search', compact('posts'));
    }
 }
